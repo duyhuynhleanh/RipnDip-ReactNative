@@ -1,6 +1,7 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import { Platform } from 'react-native'
 
+import CartScreen from '../screens/CartScreen'
 import ProductsOverviewScreen from '../screens/ProductsOverviewScreen'
 import ProductDetailScreen from '../screens/ProductDetailScreen'
 import Colors from '../constants/Colors'
@@ -9,6 +10,7 @@ const ProductsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductsOverviewScreen,
     ProductDetail: ProductDetailScreen,
+    Cart: CartScreen,
   },
   {
     defaultNavigationOptions: {

@@ -1,6 +1,8 @@
 import React from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, Platform } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../components/UI/HeaderButton'
 
 import ProductItem from '../components/ProductItem'
 
@@ -33,8 +35,21 @@ const ProductsOverviewScreen = (props) => {
   )
 }
 
-ProductsOverviewScreen.navigationOptions = {
-  headerTitle: 'Tất cả sản phẩm',
+ProductsOverviewScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Tất cả sản phẩm',
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Giỏ'
+          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+          onPress={() => {
+            navData.navigation.navigate('Cart')
+          }}
+        />
+      </HeaderButtons>
+    ),
+  }
 }
 
 export default ProductsOverviewScreen

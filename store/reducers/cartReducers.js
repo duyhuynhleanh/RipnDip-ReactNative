@@ -9,28 +9,37 @@ const initialState = {
 export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case CART_ADD_ITEM:
-      const addedProduct = action.product
-      const prodPrice = addedProduct.price
+      const addedProduct = action.payload
+
+      const prodId = addedProduct._id
       const prodName = addedProduct.name
+      const prodImage = addedProduct.image
+      const prodPrice = addedProduct.price
 
       let updateOrNewCartItem
 
       if (state.cartItems[addedProduct._id]) {
         updateOrNewCartItem = new CartItem(
-          state.cartItems[addedProduct._id].quantity + 1,
-          prodPrice,
+          prodId,
           prodName,
+          prodImage,
+          prodPrice,
+          state.cartItems[addedProduct._id].qty + 1,
           state.cartItems[addedProduct._id].sum + prodPrice
         )
       } else {
-        updateOrNewCartItem = new CartItem(1, prodPrice, prodName, prodPrice)
+        updateOrNewCartItem = new CartItem(
+          prodId,
+          prodName,
+          prodImage,
+          prodPrice,
+          1,
+          prodPrice
+        )
       }
       return {
         ...state,
-        cartItems: {
-          ...state.cartItems,
-          [addedProduct._id]: updateOrNewCartItem,
-        },
+        cartItems: [...state.cartItems, updateOrNewCartItem],
         totalAmount: state.totalAmount + prodPrice,
       }
   }
