@@ -1,65 +1,37 @@
 import React from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
+import { StyleSheet } from 'react-native'
+import { Text, Left, Right, ListItem, Thumbnail, Body } from 'native-base'
 
 const CartItem = (props) => {
+  const data = props.item.item
   return (
-    <View style={styles.cartItem}>
-      <View style={styles.itemData}>
-        <Text style={styles.quantity}>{props.quantity} </Text>
-        <Text style={styles.mainText}>
-          {props.title.length > 25
-            ? props.title.substring(0, 25 - 3) + '...'
-            : props.title}
-        </Text>
-      </View>
-      <View style={styles.itemData}>
-        <Text style={styles.mainText}>${props.amount.toFixed(2)}</Text>
-        {props.deletable && (
-          <TouchableOpacity
-            onPress={props.onRemove}
-            style={styles.deleteButton}
-          >
-            <Ionicons
-              name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
-              size={23}
-              color='red'
-            />
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
+    <ListItem style={styles.listItem} key={data.product} avatar>
+      <Left>
+        <Thumbnail source={{ uri: data.image }} />
+      </Left>
+      <Body style={styles.body}>
+        <Left>
+          <Text>{data.name}</Text>
+        </Left>
+        <Right>
+          <Text>${data.price}</Text>
+          <Text>*{data.qty}</Text>
+        </Right>
+      </Body>
+    </ListItem>
   )
 }
+
 const styles = StyleSheet.create({
-  cartItem: {
-    padding: 10,
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-  },
-  itemData: {
-    flexDirection: 'row',
+  listItem: {
     alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
   },
-  quantity: {
-    fontFamily: 'open-sans',
-    color: '#888',
-    fontSize: 16,
-  },
-  mainText: {
-    fontFamily: 'open-sans-bold',
-    fontSize: 16,
-  },
-  deleteButton: {
-    marginLeft: 20,
+  body: {
+    margin: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 })
 

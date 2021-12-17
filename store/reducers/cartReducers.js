@@ -1,47 +1,50 @@
-import { CART_ADD_ITEM } from '../constants/cartConstants'
-import CartItem from '../../models/cart-items'
+import {
+  CART_ADD_ITEM,
+  CART_REMOVE_ITEM,
+  CART_CLEAR_ITEMS,
+  CART_SAVE_SHIPPING_ADDRESS,
+  CART_SAVE_PAYMENT_METHOD,
+} from '../constants/cartConstants'
 
-const initialState = {
-  cartItems: [],
-  totalAmount: 0,
-}
-
-export const cartReducer = (state = initialState, action) => {
+export const cartReducer = (state = { cartItems: [] }, action) => {
   switch (action.type) {
     case CART_ADD_ITEM:
-      const addedProduct = action.payload
+      const item = action.payload
 
-      const prodId = addedProduct._id
-      const prodName = addedProduct.name
-      const prodImage = addedProduct.image
-      const prodPrice = addedProduct.price
-
-      let updateOrNewCartItem
-
-      if (state.cartItems[addedProduct._id]) {
-        updateOrNewCartItem = new CartItem(
-          prodId,
-          prodName,
-          prodImage,
-          prodPrice,
-          state.cartItems[addedProduct._id].qty + 1,
-          state.cartItems[addedProduct._id].sum + prodPrice
-        )
-      } else {
-        updateOrNewCartItem = new CartItem(
-          prodId,
-          prodName,
-          prodImage,
-          prodPrice,
-          1,
-          prodPrice
-        )
-      }
+      const existItem = state.cartItems.find((x) => x.product === item.product)
+      if (existItem) {
+        return {
+          ...state,
+          cartItems: state.cartItems.map((x) =>
+            x.product === existItem.product ? { ...item, qty: x.qty + 1 } : x
+          ),
+        }
+      } else
+        return {
+          ...state,
+          cartItems: [...state.cartItems, item],
+        }
+    case CART_REMOVE_ITEM:
       return {
         ...state,
-        cartItems: [...state.cartItems, updateOrNewCartItem],
-        totalAmount: state.totalAmount + prodPrice,
+        cartItems: state.cartItems.filter((x) => x.product !== action.payload),
       }
+    case CART_CLEAR_ITEMS:
+      return {
+        ...state,
+        cartItems: [],
+      }
+    case CART_SAVE_SHIPPING_ADDRESS:
+      return {
+        ...state,
+        shippingAddress: action.payload,
+      }
+    case CART_SAVE_PAYMENT_METHOD:
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      }
+    default:
+      return state
   }
-  return state
 }

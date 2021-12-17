@@ -1,9 +1,12 @@
-import products from '../../data/products'
+import { PRODUCT_LIST } from '../constants/productConstants'
 
-const initialState = {
-  products: products,
-}
-
-export const productListReducer = (state = initialState, action) => {
-  return state
+export const productListReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case PRODUCT_LIST:
+      return {
+        products: action.payload.data.products,
+      }
+    default:
+      return state
+  }
 }

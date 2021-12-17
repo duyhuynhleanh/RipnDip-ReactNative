@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Image, Button, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import Colors from '../constants/Colors'
 import * as cartActions from '../store/actions/cartActions'
+import Toast from 'react-native-toast-message'
 
 const ProductDetailScreen = (props) => {
   const productId = props.navigation.getParam('productId')
@@ -18,7 +19,13 @@ const ProductDetailScreen = (props) => {
           color={Colors.primary}
           title='Thêm vào giỏ'
           onPress={() => {
-            dispatch(cartActions.addToCart(productDetails))
+            dispatch(cartActions.addToCart(productDetails)),
+              Toast.show({
+                topOffset: 60,
+                type: 'success',
+                text1: `${name} added to Cart`,
+                text2: 'Go to your cart to complete order',
+              })
           }}
         />
       </View>

@@ -1,24 +1,24 @@
 import React, { useState } from 'react'
-import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
 import AppLoading from 'expo-app-loading'
 import * as Font from 'expo-font'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import { productListReducer } from './store/reducers/productReducers'
-import { cartReducer } from './store/reducers/cartReducers'
-import ShopNavigator from './navigation/ShopNavigator'
+import { Provider } from 'react-redux'
+import { store, persistor } from './store/store'
+import { PersistGate } from 'redux-persist/integration/react'
+import { NavigationContainer } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
+//import Header from './components/Header'
 
-const rootReducer = combineReducers({
-  cart: cartReducer,
-  productList: productListReducer,
-})
+//Context API
+import Auth from './Context/store/Auth'
 
-const store = createStore(rootReducer, composeWithDevTools())
+//Navigators
+import Main from './navigation/Main'
 
 const fetchFonts = () => {
   return Font.loadAsync({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+    Roboto_medium: require('./assets/fonts/Roboto-Medium.ttf'),
   })
 }
 
@@ -38,8 +38,16 @@ export default function App() {
   }
 
   return (
+    //<Auth>
     <Provider store={store}>
-      <ShopNavigator />
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          {/* <Header /> */}
+          <Main />
+          <Toast ref={(ref) => Toast.setRef(ref)} />
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
+    //</Auth>
   )
 }
